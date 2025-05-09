@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Self-Improvement Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #fdfbfb, #ebedee);
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      animation: fadeInDown 1s ease-in-out;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      min-height: 100vh;
+    }
+
+    nav {
+      background-color: #f1f3f5;
+      padding: 2rem;
+      border-right: 1px solid #ddd;
+      animation: fadeInLeft 1s ease-in-out;
+    }
+
+    nav ul {
+      list-style: none;
+    }
+
+    nav ul li {
+      margin: 1rem 0;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #4F46E5;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    .main {
+      padding: 2rem;
+      animation: fadeInRight 1.2s ease-in-out;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      margin-bottom: 1rem;
+      color: #4F46E5;
+    }
+
+    input,
+    textarea,
+    select,
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #4F46E5;
+      color: white;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #4338ca;
+      transform: scale(1.03);
+    }
+
+    #loginForm,
+    #logoutBtn {
+      display: none;
+    }
+
+    #logoutBtn {
+      background-color: #FF5733;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Self-Improvement Dashboard</h1>
+    <p id="userName">Welcome back 👋</p>
+    <button id="logoutBtn" onclick="logout()">Logout</button>
+  </header>
+
+  <div class="container">
+    <nav>
+      <ul>
+        <li><a href="#habit">Habits</a></li>
+        <li><a href="#goals">Goals</a></li>
+        <li><a href="#mood">Mood</a></li>
+        <li><a href="#learning">Learning</a></li>
+      </ul>
+    </nav>
+
+    <main class="main">
+      <section id="habit" class="card">
+        <h2>✅ Daily Habit Tracker</h2>
+        <input id="habitInput" type="text" placeholder="Enter a new habit...">
+        <button onclick="addHabit()">Add Habit</button>
+        <ul id="habitList"></ul>
+      </section>
+
+      <section id="goals" class="card">
+        <h2>🎯 Goal Board</h2>
+        <input id="goalInput" type="text" placeholder="Add a goal...">
+        <button onclick="addGoal()">Add Goal</button>
+        <ul id="goalList"></ul>
+      </section>
+
+      <section id="mood" class="card">
+        <h2>😄 Mood Logger</h2>
+        <select id="moodSelect">
+          <option>😄 Happy</option>
+          <option>😐 Neutral</option>
+          <option>😞 Sad</option>
+        </select>
+        <textarea id="moodNote" placeholder="Write how you feel today..."></textarea>
+        <button onclick="saveMood()">Save Mood</button>
+        <div id="moodLog"></div>
+      </section>
+
+      <section id="learning" class="card">
+        <h2>📚 What Did You Learn?</h2>
+        <textarea id="learningInput" placeholder="Type what you learned today..."></textarea>
+        <button onclick="logLearning()">Log Learning</button>
+        <ul id="learningList"></ul>
+      </section>
+
+      <section id="loginForm" class="card">
+        <h2>Login</h2>
+        <input id="username" type="text" placeholder="Enter your username">
+        <input id="password" type="password" placeholder="Enter your password">
+        <button onclick="login()">Login</button>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Function to login
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      // Simple login check (no database, just mockup)
+      if (username && password) {
+        localStorage.setItem('username', username);
+        localStorage.setItem('password', password);
+        showLoggedInState(username);
+        loadData();
+      } else {
+        alert('Please fill in both fields!');
+      }
+    }
+
+    // Function to logout
+    function logout() {
+      localStorage.removeItem('username');
+      localStorage.removeItem('password');
+      showLoggedOutState();
+      clearData();
+    }
+
+    // Show logged-in state
+    function showLoggedInState(username) {
+      document.getElementById('userName').innerText = `Welcome back, ${username} 👋`;
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('logoutBtn').style.display = 'inline-block';
+    }
+
+    // Show logged-out state
+    function showLoggedOutState() {
+      document.getElementById('userName').innerText = 'Welcome back 👋';
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('logoutBtn').style.display = 'none';
+    }
+
+    // Check if user is logged in
+    function checkLoginStatus() {
+      const username = localStorage.getItem('username');
+      if (username) {
+        showLoggedInState(username);
+        loadData();
+      } else {
+        showLoggedOutState();
+      }
+    }
+
+    // Load data from localStorage
+    function loadData() {
+      loadHabits();
+      loadGoals();
+      loadMood();
+      loadLearning();
+    }
+
+    // Save habit data to localStorage
+    function addHabit() {
+      const input = document.getElementById('habitInput');
+      const list = document.getElementById('habitList');
+      const habit = input.value.trim();
+      if (habit) {
+        const habits = JSON.parse(localStorage.getItem('habits') || '[]');
+        habits.push(habit);
+        localStorage.setItem('habits', JSON.stringify(habits));
+        input.value = '';
+        loadHabits();
+      }
+    }
+
+    // Load habits from localStorage
+    function loadHabits() {
+      const habits = JSON.parse(localStorage.getItem('habits') || '[]');
+      const list = document.getElementById('habitList');
+      list.innerHTML = '';
+      habits.forEach(habit => {
+        const li = document.createElement('li');
+        li.textContent = habit;
+        list.appendChild(li);
+      });
+    }
+
+    // Save goal data to localStorage
+    function addGoal() {
+      const input = document.getElementById('goalInput');
+      const list = document.getElementById('goalList');
+      const goal = input.value.trim();
+      if (goal) {
+        const goals = JSON.parse(localStorage.getItem('goals') || '[]');
+        goals.push(goal);
+        localStorage.setItem('goals', JSON.stringify(goals));
+        input.value = '';
+        loadGoals();
+      }
+    }
+
+    // Load goals from localStorage
+    function loadGoals() {
+      const goals = JSON.parse(localStorage.getItem('goals') || '[]');
+      const list = document.getElementById('goalList');
+      list.innerHTML = '';
+      goals.forEach(goal => {
+        const li = document.createElement('li');
+        li.textContent = goal;
+        list.appendChild(li);
+      });
+    }
+
+    // Save mood log
+    function saveMood() {
+      const mood = document.getElementById('moodSelect').value;
+      const note = document.getElementById('moodNote').value.trim();
+      if (note) {
+        const moodLogs = JSON.parse(localStorage.getItem('moodLogs') || '[]');
+        moodLogs.push({ mood, note });
+        localStorage.setItem('moodLogs', JSON.stringify(moodLogs));
+        document.getElementById('moodNote').value = '';
+        loadMood();
+      }
+    }
+
+    // Load mood logs
+    function loadMood() {
+      const moodLogs = JSON.parse(localStorage.getItem('moodLogs') || '[]');
+      const logDiv = document.getElementById('moodLog');
+      logDiv.innerHTML = '';
+      moodLogs.forEach(log => {
+        const div = document.createElement('div');
+        div.innerHTML = `<strong>${log.mood}</strong>: ${log.note}`;
+        logDiv.appendChild(div);
+      });
+    }
+
+    // Log learning data
+    function logLearning() {
+      const learningInput = document.getElementById('learningInput').value.trim();
+      if (learningInput) {
+        const learningLogs = JSON.parse(localStorage.getItem('learningLogs') || '[]');
+        learningLogs.push(learningInput);
+        localStorage.setItem('learningLogs', JSON.stringify(learningLogs));
+        document.getElementById('learningInput').value = '';
+        loadLearning();
+      }
+    }
+
+    // Load learning logs
+    function loadLearning() {
+      const learningLogs = JSON.parse(localStorage.getItem('learningLogs') || '[]');
+      const list = document.getElementById('learningList');
+      list.innerHTML = '';
+      learningLogs.forEach(log => {
+        const li = document.createElement('li');
+        li.textContent = log;
+        list.appendChild(li);
+      });
+    }
+
+    // Clear all data
+    function clearData() {
+      localStorage.removeItem('habits');
+      localStorage.removeItem('goals');
+      localStorage.removeItem('moodLogs');
+      localStorage.removeItem('learningLogs');
+      loadData();
+    }
+
+    // Initialize page
+    checkLoginStatus();
+  </script>
+</body>
+
+</html>
